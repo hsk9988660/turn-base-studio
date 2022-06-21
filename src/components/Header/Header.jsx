@@ -1,12 +1,16 @@
-import StyledAppBar from "./styledAppbar";
-import {Container, Toolbar, Box, Button, Drawer, List} from "@mui/material";
+import StyledAppBar, { StyledDrawer} from "./styledAppbar";
+import {Container, Toolbar, Box, Button, Drawer, List, ListItemButton, ListItemText, IconButton} from "@mui/material";
 import style from './Header.module.scss'
 import {StyledLink} from "./styledAppbar"
 import {useState} from "react";
 import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
+import {NavLink} from "react-router-dom";
 
 export const Appbar = ()=>{
     const [anchorMenuDrawer, setAnchorMenuDrawer] = useState(false);
+    const [openDrawerTokens, setOpenDrawerTokens] = useState(false);
+    const [openDrawerNFTs, setOpenDrawerNFTs] = useState(false);
 
     const openFanMenuDrawer = Boolean(anchorMenuDrawer);
     const handleOpenMenuDrawer = () => {
@@ -18,10 +22,59 @@ export const Appbar = ()=>{
     const handleClickTokensMenuDrawer = () => {
         setOpenDrawerTokens(!openDrawerTokens);
     };
+    const handleClickFanMenuDrawer = () => {
+        setOpenDrawerNFTs(!openDrawerNFTs);
+    };
+    const links = [
+        {
+            label: "Home",
+            link: "/",
+        },
+        {
+            label: "About",
+            link: "about",
+        },
+        {
+            label: "Services",
+            link: "services",
+        },
+        {
+            label: "PortFolio",
+            link: "portfolio",
+        },
+        {
+            label: "Contact",
+            link: "contact",
+        },
+    ];
+
+    const portFolioDropDown = [
+        {
+            label: "Logo Design",
+            link: "logo",
+        },
+        {
+            label: "Branding Guide",
+            link: "about",
+        },
+        {
+            label: "Branding Clothing",
+            link: "services",
+        },
+        {
+            label: "Web and Apps",
+            link: "portfolio",
+        },
+        {
+            label: "Marketing and Seo",
+            link: "contact",
+        },
+    ]
     return (
         <StyledAppBar>
-       <Container>
-           <Toolbar disableGutters sx={{ justifyContent: "end" }}>
+            <Box sx={{width:"100%"}}>
+           <Toolbar disableGutters sx={{ justifyContent: "end" ,mr:{md:"0px",lg:8}}}>
+               {/*<img src={logoImage} alt="no image"/>*/}
                <Box className={style.boxDisplay}>
                <Box>
                    <StyledLink to="/" >
@@ -42,37 +95,70 @@ export const Appbar = ()=>{
                    <StyledLink to="portfolio" >
                        portfolio
                    </StyledLink>
-               </Box>
-                   <Button>
+               </Box >
+                   <Box sx={{mb:5}}>
+                   <StyledLink to="contact" >
+                   <Button sx={{color:"white",ml:"60px"}}>
                        Contact
                    </Button>
+                   </StyledLink>
+                   </Box>
                </Box>
                <Button
                    aria-label="menu"
                    className={style.menueIcon}
                    onClick={handleOpenMenuDrawer}
+                   sx={{color:"black",ml:"60px",display:{sm:"flex",md:"flex",lg:"none"}}}
                >
                    <MenuIcon fontSize="large" />
                </Button>
-               <Drawer
+               <StyledDrawer
                    anchor="right"
                    open={openFanMenuDrawer}
                    onClose={() => setAnchorMenuDrawer(false)}
                >
                    <List className={style.menueList} component="nav">
-                       <ListItemButton
-                           onClick={handleClickFanMenuDrawer}
-                           className={style.headingColor}
+                       <IconButton
+                           aria-label="menu"
+                           onClick={handleCloseMenuDrawer}
+                           sx={{color:"white",float:"right",mr:1}}
                        >
-                           <ListItemText
-                               primary="NFT Rankings"
-                               primaryTypographyProps={{ style: { fontWeight: 600 } }}
-                           />
-                       </ListItemButton>
+                           <CloseIcon />
+                       </IconButton>
+
+                       <Box sx={{ml:3,mt:6}}>
+                       {links.map((item, index) => (
+                           <NavLink
+                               to={item.link}
+                               className={style.linkUnderline}
+                               target="_blank"
+                               key={`link_${index}`}
+                           >
+                               {item.label === "Services" ? "" :
+                                   <ListItemButton className={style.headingColor}>
+                                       <ListItemText
+                                           primaryTypographyProps={{style: {fontWeight: 600}}}
+                                           primary={
+                                               <Box>
+                                                   <NavLink
+                                                       to={item.link}
+                                                       className={style.linkUnderline}
+                                                       target="_blank"
+                                                   >
+                                                       {item.label === "Services" ? "" : item.label}
+                                                   </NavLink>
+                                               </Box>
+                                           }
+                                       />
+                                   </ListItemButton>
+                               }
+                           </NavLink>
+                       ))}
+                       </Box>
                    </List>
-                   </Drawer>
+                   </StyledDrawer>
            </Toolbar>
-       </Container>
+            </Box>
         </StyledAppBar>
     )
 }
