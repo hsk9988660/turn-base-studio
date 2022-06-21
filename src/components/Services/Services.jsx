@@ -1,11 +1,10 @@
-import {Box} from "@mui/material";
+import React from 'react'
+import { LogoDesign } from './LogoDesign'
 
-
-export const Services = ()=>{
-
-    return (
-        <Box>
-            Services
-        </Box>
-    )
+export const Services= ()=> {
+  return (
+    <>
+    <LogoDesign/>
+    </>
+  )
 }
